@@ -1,0 +1,15 @@
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8020/eureka
+    register-with-eureka: true
+    fetchRegistry: true
+  instance:
+    prefer-ip-address: true
+    
+spring:
+  application:
+    name: ConsumerService
+    
+server:
+  port: 8030
