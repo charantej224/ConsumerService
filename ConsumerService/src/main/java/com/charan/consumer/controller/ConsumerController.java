@@ -27,7 +27,7 @@ public class ConsumerController {
 	RestTemplate restTemplate = new RestTemplate();
 
 	@GetMapping("/getEmployees")
-	public void getEmployees() {
+	public String getEmployees() {
 
 		ServiceInstance serviceInstance = loadBalancer.choose("ZUULGATEWAYSERVICE");
 
@@ -44,6 +44,7 @@ public class ConsumerController {
 			System.out.println(ex);
 		}
 		System.out.println(response.getBody());
+		return response.getBody();
 
 	}
 
@@ -54,8 +55,24 @@ public class ConsumerController {
 	}
 
 	@GetMapping("/getDepartments")
-	public void getDepartments() {
+	public String getDepartments() {
 
+		ServiceInstance serviceInstance = loadBalancer.choose("ZUULGATEWAYSERVICE");
+
+		System.out.println(serviceInstance.getUri());
+
+		String baseUrl = serviceInstance.getUri().toString();
+
+		baseUrl = baseUrl + "/department/getAllDepartments";
+		RestTemplate restTemplate = new RestTemplate();
+		ResponseEntity<String> response = null;
+		try {
+			response = restTemplate.exchange(baseUrl, HttpMethod.GET, getHeaders(), String.class);
+		} catch (Exception ex) {
+			System.out.println(ex);
+		}
+		System.out.println(response.getBody());
+		return response.getBody();
 	}
 
 }
